@@ -3,7 +3,6 @@ import atexit
 import sys
 
 
-
 def insert_data(table, path):
     with open(path, 'r') as inputFile:
         size = inputFile.readline().split(",")
@@ -84,12 +83,12 @@ class _Clinics:
 
         return Clinic(*c.fetchone())
 
-    def update_demand(self, location, num):   # david this function help for your impl
+    def update_demand(self, location, num):  # david this function help for your impl
         c = self._conn.cursor()
         tmp = self.find(id)
         c.execute(""" UPDATE Clinics
              SET demand = ? 
-             WHERE location = ?""", [tmp.demand+num, location])
+             WHERE location = ?""", [tmp.demand + num, location])
 
 
 class _Logistics:
