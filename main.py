@@ -28,10 +28,10 @@ def main(args):
     repo.create_tables()
     insert_data(repo, args[1])
 
-    print(repo.logistics.find(1).name)  # test
-    print(repo.clinics.find(4).location)  # test
-    print(repo.vaccines.pool_the_oldest().id)  # test
-    print(repo.vaccines.find(2).date)  # test
+    # print(repo.logistics.find(1).name)  # test
+    # print(repo.clinics.find(4).location)  # test
+    # print(repo.vaccines.pool_the_oldest().id)  # test
+    # print(repo.vaccines.find(2).date)  # test
 
 
 # Press the green button in the gutter to run the script.
