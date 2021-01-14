@@ -1,4 +1,4 @@
-################################################################ Data Transfer Objects: DTO
+# ############################################################### Data Transfer Objects: DTO
 class Vaccine:
     def __init__(self, id, date, supplier, quantity):
         self.id = id

@@ -1,4 +1,4 @@
-########################################################## Data Access Objects:    DAO
+# ######################################################### Data Access Objects:    DAO
 # All of these are meant to be singletons
 from DTO import *
 
@@ -113,7 +113,7 @@ class _Clinics:
         tmp = self.findByLocation(location)
         c.execute(""" UPDATE Clinics
              SET demand = ? 
-             WHERE location = ?""", [tmp.demand + num, location])
+             WHERE location = ?""", [tmp.demand - num, location])
 
 
 class _Logistics:

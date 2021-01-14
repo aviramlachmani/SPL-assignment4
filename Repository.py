@@ -1,4 +1,4 @@
-##################################################### The Repository
+# #################################################### The Repository
 import atexit
 import sqlite3
 
@@ -15,14 +15,37 @@ class _Repository:
 
     def _close(self):
         self._conn.commit()
-        #self._conn.close() #TODO ask aviram why this throws an error
+        # self._conn.close() #TODO ask aviram why this throws an error
+
+    def totals(self):
+        c = self._conn.cursor()
+        totals = [0, 0, 0, 0]
+
+        c.execute("SELECT quantity FROM Vaccines")
+        list_from_db = c.fetchall()
+        for x in list_from_db:
+            totals[0] = totals[0] + x[0]
+
+        c.execute("SELECT demand FROM Clinics")
+        list_from_db = c.fetchall()
+        for x in list_from_db:
+            totals[1] = totals[1] + x[0]
+
+        c.execute("SELECT count_received, count_sent FROM Logistics")
+        list_from_db = c.fetchall()
+        for x in list_from_db:
+            totals[2] = totals[2] + x[0]
+            totals[3] = totals[3] + x[1]
+
+        totals = map(str, totals)  # converts each cell from int to str
+        return totals
 
     def create_tables(self):
         self._conn.executescript("""
         CREATE TABLE Vaccines (
             id      INTEGER     PRIMARY KEY,
             date    DATE        NOT NULL,
-            supplier INTEGER            ,
+            supplier INTEGER    NOT NULL,
             quantity INTEGER    NOT NULL, 
             FOREIGN KEY (supplier) REFERENCES Suppliers(id)
         );
@@ -44,7 +67,7 @@ class _Repository:
         CREATE TABLE Logistics (
             id            INTEGER     PRIMARY KEY ,
             name          TEXT    NOT NULL,
-            count_Sent    INTEGER     NOT NULL,
+            count_sent    INTEGER     NOT NULL,
             count_received INTEGER NOT NULL 
         );
 
