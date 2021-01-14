@@ -74,7 +74,6 @@ def main(args):
     repo.create_tables()
     insert_data(repo, args[1])
     execute(repo,args[2],args[3])
-    repo._close() #TODO ask aviram if i need to call this or it is automatically called
 
 
 

@@ -15,7 +15,7 @@ class _Repository:
 
     def _close(self):
         self._conn.commit()
-        # self._conn.close() #TODO ask aviram why this throws an error
+        self._conn.close() #TODO ask aviram why this throws an error
 
     def totals(self):
         c = self._conn.cursor()
