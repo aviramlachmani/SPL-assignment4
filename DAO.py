@@ -3,6 +3,8 @@
 from DTO import *
 
 
+
+
 class _Vaccines:
     def __init__(self, conn):
         self._conn = conn
@@ -20,14 +22,30 @@ class _Vaccines:
 
         return Vaccine(*c.fetchone())
 
-    def pool_the_oldest(self):  # david this function help for your impl
+    def pull_the_oldest(self):  # david this function help for your impl
         c = self._conn.cursor()
+
         c.execute("""SELECT * FROM Vaccines
-        ORDER BY DATE""")
+        ORDER BY date(date)""")
+
         ans = Vaccine(*c.fetchone())
-        c.execute(""" DELETE FROM Vaccines WHERE id = ? """, [ans.id])
         return ans
 
+    def update_quantity(self, id, amount):  # david this function help for your impl
+        c = self._conn.cursor()
+        tmp = self.find(id)
+        c.execute(""" UPDATE Vaccines
+             SET quantity = ? 
+             WHERE id = ?""", [tmp.quantity - amount, id])
+
+    def remove(self,id):
+        c = self._conn.cursor()
+        c.execute(""" DELETE FROM Vaccines WHERE id = ? """, [id])
+
+    def maxId(self):
+        c = self._conn.cursor()
+        c.execute("SELECT MAX(id) FROM Vaccines")
+        return c.fetchone()[0]
 
 class _Suppliers:
     def __init__(self, conn):
@@ -38,13 +56,21 @@ class _Suppliers:
                 INSERT INTO Suppliers (id,name,logistic) VALUES (?,?, ?)
         """, [supplier.id, supplier.name, supplier.logistic])
 
-    def find(self, id):
+    def find(self,id):
         c = self._conn.cursor()
         c.execute("""
                 SELECT * FROM Suppliers WHERE id = ?
             """, [id])
 
         return Supplier(*c.fetchone())
+
+    def findByName(self,name):
+        c = self._conn.cursor()
+        c.execute("""
+            SELECT * From Suppliers where name = ?
+        """, [name])
+        return Supplier(*c.fetchone())
+
 
 
 class _Clinics:
@@ -53,8 +79,8 @@ class _Clinics:
 
     def insert(self, clinic):
         self._conn.execute("""
-            INSERT INTO Clinics (id,location, demand) VALUES (?, ?, ?)
-        """, [clinic.id, clinic.location, clinic.demand])
+            INSERT INTO Clinics (id,location, demand, logistic) VALUES (?, ?, ?, ?)
+        """, [clinic.id, clinic.location, clinic.demand, clinic.logistic])
 
     def find(self, id):
         c = self._conn.cursor()
@@ -64,9 +90,27 @@ class _Clinics:
 
         return Clinic(*c.fetchone())
 
+    def findByLocation(self,location):
+        c = self._conn.cursor()
+        c.execute("""
+                    SELECT * FROM Clinics WHERE location = ?
+                """, [location])
+        # c.execute("SELECT * FROM Clinics")
+        # list = c.fetchall()
+        #print("line 98, find by Location:" + list)
+        list = c.fetchone()
+        return Clinic(*list)
+
+    def find_logistic_id_by_location(self,location):
+        c = self._conn.cursor()
+        c.execute("""
+            SELECT logistic FROM Clinics WHERE location = ?
+        """,[location])
+        return c.fetchone() #todo might need to use a different method
+
     def update_demand(self, location, num):  # david this function help for your impl
         c = self._conn.cursor()
-        tmp = self.find(id)
+        tmp = self.findByLocation(location)
         c.execute(""" UPDATE Clinics
              SET demand = ? 
              WHERE location = ?""", [tmp.demand + num, location])
@@ -86,19 +130,18 @@ class _Logistics:
         c.execute("""
             SELECT * FROM Logistics WHERE id = ? 
         """, [id])
-
         return Logistic(*c.fetchone())
 
-    def update_receive(self, id, num):  # david this function help for your impl
+    def update_receive(self, id, amount):  # david this function help for your impl
         c = self._conn.cursor()
         tmp = self.find(id)
         c.execute(""" UPDATE Logistics
-        SET count_receive = ? 
-        WHERE id = ?""", [num + tmp.count_received, id])
+        SET count_received = ? 
+        WHERE id = ?""", [amount + tmp.count_received, id])
 
-    def update_sent(self, id, num):  # david this function help for your impl
+    def update_sent(self, id, amount):  # david this function help for your impl
         c = self._conn.cursor()
         tmp = self.find(id)
         c.execute(""" UPDATE Logistics
         SET count_sent = ? 
-        WHERE id = ?""", [num + tmp.count_sent, id])
+        WHERE id = ?""", [amount + tmp.count_sent, id])

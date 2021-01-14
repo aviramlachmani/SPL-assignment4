@@ -15,7 +15,7 @@ class _Repository:
 
     def _close(self):
         self._conn.commit()
-        self._conn.close()
+        #self._conn.close() #TODO ask aviram why this throws an error
 
     def create_tables(self):
         self._conn.executescript("""
@@ -37,8 +37,8 @@ class _Repository:
         CREATE TABLE Clinics (
             id            INTEGER     PRIMARY KEY ,
             location          TEXT    NOT NULL,
-            demand         INTEGER     NOT NULL
-
+            demand         INTEGER     NOT NULL,
+            logistic       INTEGER    NOT NULL
         );
 
         CREATE TABLE Logistics (
