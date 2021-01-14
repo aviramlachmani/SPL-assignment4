@@ -25,7 +25,7 @@ def insert_data(database, config):
 
 
 def execute(database, orders,output):
-    numberOflinesExecuted =0 #TODO debugging
+    numberOflinesExecuted =0 # debugging purpuses only
     with open(orders,'r') as orderFile , open(output,'w') as outputFile:
         line = orderFile.readline().split(",")
         while len(line)>1:

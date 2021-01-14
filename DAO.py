@@ -106,7 +106,7 @@ class _Clinics:
         c.execute("""
             SELECT logistic FROM Clinics WHERE location = ?
         """,[location])
-        return c.fetchone() #todo might need to use a different method
+        return c.fetchone()
 
     def update_demand(self, location, num):  # david this function help for your impl
         c = self._conn.cursor()
