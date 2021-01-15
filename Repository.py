@@ -21,17 +21,17 @@ class _Repository:
         c = self._conn.cursor()
         totals = [0, 0, 0, 0]
 
-        c.execute("SELECT quantity FROM Vaccines")
+        c.execute("SELECT quantity FROM vaccines")
         list_from_db = c.fetchall()
         for x in list_from_db:
             totals[0] = totals[0] + x[0]
 
-        c.execute("SELECT demand FROM Clinics")
+        c.execute("SELECT demand FROM clinics")
         list_from_db = c.fetchall()
         for x in list_from_db:
             totals[1] = totals[1] + x[0]
 
-        c.execute("SELECT count_received, count_sent FROM Logistics")
+        c.execute("SELECT count_received, count_sent FROM logistics")
         list_from_db = c.fetchall()
         for x in list_from_db:
             totals[2] = totals[2] + x[0]
@@ -42,7 +42,7 @@ class _Repository:
 
     def create_tables(self):
         self._conn.executescript("""
-        CREATE TABLE Vaccines (
+        CREATE TABLE vaccines (
             id      INTEGER     PRIMARY KEY,
             date    DATE        NOT NULL,
             supplier INTEGER    NOT NULL,
@@ -50,21 +50,21 @@ class _Repository:
             FOREIGN KEY (supplier) REFERENCES Suppliers(id)
         );
 
-        CREATE TABLE Suppliers (
+        CREATE TABLE suppliers (
             id                 INTEGER     PRIMARY KEY,
             name     TEXT    NOT NULL,
             logistic     INTEGER ,
             FOREIGN KEY (logistic) REFERENCES Logistic(id)
         );
 
-        CREATE TABLE Clinics (
+        CREATE TABLE clinics (
             id            INTEGER     PRIMARY KEY ,
             location          TEXT    NOT NULL,
             demand         INTEGER     NOT NULL,
             logistic       INTEGER    NOT NULL
         );
 
-        CREATE TABLE Logistics (
+        CREATE TABLE logistics (
             id            INTEGER     PRIMARY KEY ,
             name          TEXT    NOT NULL,
             count_sent    INTEGER     NOT NULL,
